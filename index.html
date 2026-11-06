@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101114">
+  <meta name="description" content="NEXA AI — Your intelligent AI assistant.">
+  <title>NEXA AI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="auth-screen" class="auth-screen">
+    <section class="auth-card">
+      <a class="brand brand-center" href="#" aria-label="NEXA AI home"><span class="brand-mark">N</span><span>NEXA <b>AI</b></span></a>
+      <h1>Meet your new AI assistant.</h1>
+      <p class="muted">Sign in or create an account to continue.</p>
+      <div class="auth-tabs" role="tablist">
+        <button class="tab active" data-tab="email" role="tab">Email</button>
+        <button class="tab" data-tab="phone" role="tab">Phone</button>
+      </div>
+      <form id="email-form" class="auth-form">
+        <label for="email">Email address</label>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password">
+        <button class="primary-btn" type="submit">Continue with email</button>
+      </form>
+      <form id="phone-form" class="auth-form hidden">
+        <label for="phone">Phone number</label>
+        <input id="phone" type="tel" placeholder="+389 7X XXX XXX" autocomplete="tel">
+        <button class="primary-btn" type="submit">Continue with phone</button>
+        <p class="tiny muted">Phone verification by SMS will be connected during backend setup.</p>
+      </form>
+      <div class="separator"><span>or continue with</span></div>
+      <div class="social-buttons">
+        <button class="social-btn" id="google-btn"><span class="google-g">G</span> Google</button>
+        <button class="social-btn" id="apple-btn"><span class="apple-symbol">●</span> Apple</button>
+      </div>
+      <button id="guest-btn" class="guest-btn">Continue as guest</button>
+      <p class="tiny muted legal">By continuing, you agree to the Terms of Service and Privacy Policy.</p>
+      <p id="auth-note" class="tiny note" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <main id="chat-screen" class="chat-screen hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-top">
+        <a class="brand" href="#"><span class="brand-mark">N</span><span>NEXA <b>AI</b></span></a>
+        <button class="icon-btn mobile-close" id="close-sidebar" aria-label="Close menu">×</button>
+      </div>
+      <button class="new-chat" id="new-chat"><span>＋</span> New chat</button>
+      <div class="history-heading">RECENT</div>
+      <div id="history-list" class="history-list"><p class="empty-history">Your conversations will appear here.</p></div>
+      <div class="sidebar-bottom">
+        <div class="plan-label">NEXA AI <span>GUEST</span></div>
+        <button class="upgrade-btn" id="upgrade-btn">Explore NEXA AI Plus</button>
+        <button class="profile-btn" id="profile-btn"><span class="avatar">G</span><span>Guest account</span><span class="more">···</span></button>
+      </div>
+    </aside>
+    <section class="chat-main">
+      <header class="chat-header">
+        <button class="icon-btn mobile-menu" id="open-sidebar" aria-label="Open menu">☰</button>
+        <span class="model-name">NEXA AI <span class="model-tag">Preview</span></span>
+        <button class="sign-in-link" id="header-signin">Sign in</button>
+      </header>
+      <div class="conversation" id="conversation">
+        <div class="welcome" id="welcome">
+          <div class="welcome-mark">N</div>
+          <h1>What can I help with?</h1>
+          <p class="muted">Ask anything. Explore ideas. Get things done.</p>
+          <div class="suggestions">
+            <button class="suggestion" data-prompt="Help me write a professional email">✎ <span>Write an email</span></button>
+            <button class="suggestion" data-prompt="Explain a difficult topic in simple words">◈ <span>Explain something</span></button>
+            <button class="suggestion" data-prompt="Give me creative ideas for a new project">✧ <span>Brainstorm ideas</span></button>
+            <button class="suggestion" data-prompt="Help me plan my week">▦ <span>Plan my week</span></button>
+          </div>
+        </div>
+        <div id="messages" class="messages"></div>
+      </div>
+      <div class="composer-wrap">
+        <form id="chat-form" class="composer">
+          <button class="attach-btn" type="button" id="attach-btn" aria-label="Attach file">＋</button>
+          <input id="message-input" type="text" placeholder="Message NEXA AI..." autocomplete="off">
+          <button class="send-btn" type="submit" aria-label="Send message">↑</button>
+        </form>
+        <p class="disclaimer">NEXA AI Preview can make mistakes. Check important information.</p>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
