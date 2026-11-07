@@ -3,16 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101114">
-  <meta name="description" content="NEXA AI — Your intelligent AI assistant.">
-  <title>NEXA AI</title>
+  <meta name="theme-color" content="#0b0b10">
+  <meta name="description" content="NEXA AI — Think clearly. Create freely. Get more done.">
+  <title>NEXA AI — Your AI, reimagined</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main id="auth-screen" class="auth-screen">
+  <main id="landing-screen" class="landing-screen">
+    <nav class="landing-nav">
+      <a class="brand" href="#" aria-label="NEXA AI home"><span class="brand-mark">N</span><span>NEXA <b>AI</b></span></a>
+      <div class="nav-actions">
+        <button class="nav-login" id="landing-login">Log in</button>
+        <button class="nav-signup" id="landing-signup">Get started <span>↗</span></button>
+      </div>
+    </nav>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="status-dot"></span> A smarter way to move forward</div>
+        <h1>Ideas move faster<br>with <span>NEXA AI.</span></h1>
+        <p class="hero-description">Meet your new thinking partner. Explore ideas, get clear answers, write better, and turn plans into progress.</p>
+        <div class="hero-actions">
+          <button class="hero-primary" id="hero-start">Start chatting <span>→</span></button>
+          <button class="hero-secondary" id="hero-signin">I already have an account</button>
+        </div>
+        <div class="hero-footnote"><span>✦</span> Start free. No complicated setup.</div>
+      </div>
+      <div class="hero-visual" aria-label="NEXA AI chat preview">
+        <div class="visual-glow"></div>
+        <div class="preview-window">
+          <div class="preview-top"><div class="window-dots"><i></i><i></i><i></i></div><span>NEXA AI <b>PREVIEW</b></span><span class="preview-menu">···</span></div>
+          <div class="preview-content">
+            <div class="preview-question"><span class="mini-avatar">Y</span><div><small>YOU</small><p>How do I turn an idea into a real project?</p></div></div>
+            <div class="preview-answer"><div class="answer-brand">N</div><div><small>NEXA AI</small><p>Every great project starts with one clear next step.</p><div class="answer-lines"><i></i><i></i><i></i></div><div class="answer-tip"><span>✦</span> Let's break your idea into a simple plan.</div></div></div>
+            <div class="preview-input"><span>Message NEXA AI...</span><b>↑</b></div>
+          </div>
+        </div>
+        <div class="floating-chip chip-one"><span>✧</span> Think bigger</div>
+        <div class="floating-chip chip-two"><span>↗</span> Make progress</div>
+      </div>
+    </section>
+    <section class="feature-strip">
+      <div><span class="feature-icon">✦</span><span><b>Think</b><small>Explore new ideas</small></span></div>
+      <div><span class="feature-icon">⌁</span><span><b>Create</b><small>Write and build</small></span></div>
+      <div><span class="feature-icon">◈</span><span><b>Understand</b><small>Learn with clarity</small></span></div>
+      <div><span class="feature-icon">↗</span><span><b>Get things done</b><small>Plan your next move</small></span></div>
+    </section>
+    <footer class="landing-footer"><span>© 2026 NEXA AI</span><span>Built for ideas in motion.</span></footer>
+  </main>
+
+  <main id="auth-screen" class="auth-screen hidden">
+    <button class="back-home" id="auth-back">← Back to home</button>
     <section class="auth-card">
       <a class="brand brand-center" href="#" aria-label="NEXA AI home"><span class="brand-mark">N</span><span>NEXA <b>AI</b></span></a>
-      <h1>Meet your new AI assistant.</h1>
+      <h1>Welcome to NEXA AI.</h1>
       <p class="muted">Sign in or create an account to continue.</p>
       <div class="auth-tabs" role="tablist">
         <button class="tab active" data-tab="email" role="tab">Email</button>
@@ -20,16 +66,16 @@
       </div>
       <form id="email-form" class="auth-form">
         <label for="email">Email address</label>
-        <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
         <label for="password">Password</label>
-        <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password">
+        <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" minlength="8" required>
         <button class="primary-btn" type="submit">Continue with email</button>
       </form>
       <form id="phone-form" class="auth-form hidden">
         <label for="phone">Phone number</label>
         <input id="phone" type="tel" placeholder="+389 7X XXX XXX" autocomplete="tel">
         <button class="primary-btn" type="submit">Continue with phone</button>
-        <p class="tiny muted">Phone verification by SMS will be connected during backend setup.</p>
+        <p class="tiny muted">Phone verification will be enabled when the secure account service is connected.</p>
       </form>
       <div class="separator"><span>or continue with</span></div>
       <div class="social-buttons">
@@ -83,7 +129,7 @@
           <input id="message-input" type="text" placeholder="Message NEXA AI..." autocomplete="off">
           <button class="send-btn" type="submit" aria-label="Send message">↑</button>
         </form>
-        <p class="disclaimer">NEXA AI Preview can make mistakes. Check important information.</p>
+        <p class="disclaimer">NEXA AI Preview is a prototype. AI responses and accounts will be connected in a later stage.</p>
       </div>
     </section>
   </main>
