@@ -85,18 +85,48 @@ function renderMessages(){
   const conversation=document.getElementById("conversation");
   conversation.scrollTop=conversation.scrollHeight;
 }
-function sendMessage(text){
+async function sendMessage(text){
   const value=(text||input.value).trim();
   if(!value)return;
   if(!activeConversation.length){
     activeConversation=[];
     conversations.unshift(activeConversation);
   }
+
   activeConversation.push({role:"user",text:value});
-  activeConversation.push({role:"assistant",text:"Thanks for trying NEXA AI. This is the interactive interface preview. In the next stage, we will connect a real AI model so it can understand and answer your messages."});
   input.value="";
+  input.disabled=true;
+  const sendButton=document.querySelector(".send-btn");
+  sendButton.disabled=true;
   renderMessages();
   renderHistory();
+
+  const pendingMessage={role:"assistant",text:"NEXA AI is thinking..."};
+  activeConversation.push(pendingMessage);
+  renderMessages();
+
+  try{
+    const response=await fetch("/api/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        messages:activeConversation
+          .filter(message=>message!==pendingMessage)
+          .map(message=>({role:message.role,content:message.text}))
+      })
+    });
+    const data=await response.json();
+    if(!response.ok)throw new Error(data.error||"The AI service could not respond.");
+    pendingMessage.text=data.reply;
+  }catch(error){
+    pendingMessage.text="Sorry, NEXA AI could not connect. "+error.message;
+  }finally{
+    input.disabled=false;
+    sendButton.disabled=false;
+    renderMessages();
+    renderHistory();
+    input.focus();
+  }
 }
 document.getElementById("chat-form").addEventListener("submit",e=>{
   e.preventDefault();
