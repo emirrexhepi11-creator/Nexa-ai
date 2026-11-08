@@ -128,3 +128,14 @@ button{cursor:pointer}
 .settings-card-head .icon-btn{width:32px;height:32px;background:#24202d;color:#eee;font-size:20px}
 .settings-row{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid #302c39;color:#ddd6e9;font-size:13px}
 .settings-row strong{color:#bba5ff;font-weight:500}
+
+
+/* International phone input */
+.iti{width:100%;display:block}
+.iti input{width:100%!important;padding-left:95px!important}
+.iti__country-container{z-index:5}
+.iti__selected-country{background:#24202d!important;border-radius:7px 0 0 7px}
+.iti__dropdown-content{background:#17151e!important;color:#eeeaf7!important;border:1px solid #393443!important;border-radius:9px!important;box-shadow:0 12px 35px #0009!important}
+.iti__search-input{background:#0e0e14!important;color:#f4f0fc!important;border:1px solid #393443!important}
+.iti__country{color:#eeeaf7!important}
+.iti__country:hover,.iti__country.iti__highlight{background:#302741!important}
