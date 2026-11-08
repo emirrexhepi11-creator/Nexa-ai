@@ -135,6 +135,21 @@ document.getElementById("chat-form").addEventListener("submit",e=>{
 document.querySelectorAll(".suggestion").forEach(button=>{
   button.addEventListener("click",()=>sendMessage(button.dataset.prompt));
 });
+document.getElementById("home-btn").addEventListener("click",()=>{
+  showScreen(landingScreen);
+});
+document.getElementById("history-btn").addEventListener("click",()=>{
+  document.getElementById("history-list").scrollIntoView({behavior:"smooth",block:"nearest"});
+});
+document.getElementById("settings-btn").addEventListener("click",()=>{
+  document.getElementById("settings-overlay").classList.remove("hidden");
+});
+document.getElementById("close-settings").addEventListener("click",()=>{
+  document.getElementById("settings-overlay").classList.add("hidden");
+});
+document.getElementById("settings-overlay").addEventListener("click",event=>{
+  if(event.target.id==="settings-overlay")event.currentTarget.classList.add("hidden");
+});
 document.getElementById("new-chat").addEventListener("click",()=>{
   activeConversation=[];
   renderMessages();
