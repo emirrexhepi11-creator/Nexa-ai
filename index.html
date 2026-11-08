@@ -12,7 +12,8 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/svg+xml" href="/icons/nexa-icon.svg">
   <link rel="apple-touch-icon" href="/icons/nexa-icon.svg">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
   <main id="landing-screen" class="landing-screen">
@@ -76,7 +77,8 @@
       </form>
       <form id="phone-form" class="auth-form hidden">
         <label for="phone">Phone number</label>
-        <input id="phone" type="tel" placeholder="+389 7X XXX XXX" autocomplete="tel">
+        <input id="phone" type="tel" placeholder="Enter your phone number" autocomplete="tel" required>
+        <p class="tiny muted">Choose your country code. Phone numbers from countries worldwide are supported.</p>
         <button class="primary-btn" type="submit">Continue with phone</button>
         <p class="tiny muted">Phone verification will be enabled when the secure account service is connected.</p>
       </form>
@@ -150,7 +152,8 @@
       <p class="tiny muted">Account security and language options will be added in a future update.</p>
     </section>
   </div>
-  <script src="app.js?v=5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
+  <script src="app.js?v=6"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
