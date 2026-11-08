@@ -9,6 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/svg+xml" href="/icons/nexa-icon.svg">
+  <link rel="apple-touch-icon" href="/icons/nexa-icon.svg">
   <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
@@ -134,5 +137,14 @@
     </section>
   </main>
   <script src="app.js?v=2"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/service-worker.js").catch(error => {
+          console.error("NEXA AI service worker registration failed:", error);
+        });
+      });
+    }
+  </script>
 </body>
 </html>
