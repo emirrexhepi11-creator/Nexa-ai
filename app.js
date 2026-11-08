@@ -193,4 +193,6 @@ document.getElementById("upgrade-btn").addEventListener("click",()=>alert("NEXA 
 document.getElementById("profile-btn").addEventListener("click",()=>{
   if(guestMode)openAuth();
 });
+loadConversations();
+renderHistory();
 renderMessages();
