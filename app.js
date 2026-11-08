@@ -103,24 +103,66 @@ document.getElementById("google-btn").addEventListener("click",async()=>{
   });
   if(error)authNote.textContent="Google sign-in failed: "+error.message;
 });
-document.getElementById("apple-btn").addEventListener("click",()=>authNote.textContent="Apple sign-in is shown in this preview. It needs Apple Developer and OAuth configuration before it can be used.");
-emailForm.addEventListener("submit",e=>{
-  e.preventDefault();
-  authNote.textContent="Email login is not active yet. We must connect a secure account service before you can register or sign in.";
+document.getElementById("apple-btn").addEventListener("click",async()=>{
+  if(!supabaseClient){authNote.textContent="Account service unavailable.";return;}
+  const {error}=await supabaseClient.auth.signInWithOAuth({
+    provider:"apple",
+    options:{redirectTo:window.location.origin+window.location.pathname}
+  });
+  if(error)authNote.textContent="Apple sign-in needs configuration: "+error.message;
 });
-phoneForm.addEventListener("submit",e=>{
+emailForm.addEventListener("submit",async e=>{
   e.preventDefault();
-  if(!phoneIti){
-    authNote.textContent="The international phone selector could not load. Please refresh the page and try again.";
-    return;
-  }
-  if(!phoneIti.isValidNumber()){
-    authNote.textContent="Please choose your country and enter a valid phone number.";
-    phoneInput.focus();
-    return;
-  }
-  const internationalNumber=phoneIti.getNumber();
-  authNote.textContent="Valid international number: "+internationalNumber+". SMS sign-in will work after we connect a secure verification service.";
+  if(!supabaseClient){authNote.textContent="Account service is unavailable. Refresh and try again.";return;}
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
+  const action=document.getElementById("email-action").value;
+  const button=emailForm.querySelector('button[type="submit"]');
+  button.disabled=true;
+  authNote.textContent=action==="signup"?"Creating your account...":"Signing in...";
+  try{
+    let result;
+    if(action==="signup"){
+      result=await supabaseClient.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin+"/"}});
+    }else{
+      result=await supabaseClient.auth.signInWithPassword({email,password});
+    }
+    if(result.error)throw result.error;
+    if(result.data.session){
+      enterChat(false);
+    }else if(action==="signup"){
+      authNote.textContent="Check your email for a confirmation link, then sign in.";
+    }else{
+      authNote.textContent="Please confirm your email address before signing in.";
+    }
+  }catch(error){authNote.textContent=error.message||"Email authentication failed.";}
+  finally{button.disabled=false;}
+});
+let pendingPhone=null;
+phoneForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(!supabaseClient){authNote.textContent="Account service is unavailable.";return;}
+  if(!phoneIti){authNote.textContent="Phone selector unavailable. Refresh and try again.";return;}
+  if(!phoneIti.isValidNumber()){authNote.textContent="Choose your country and enter a valid number.";return;}
+  const phone=phoneIti.getNumber();
+  const button=phoneForm.querySelector('button[type="submit"]');
+  button.disabled=true;
+  try{
+    const {error}=await supabaseClient.auth.signInWithOtp({phone});
+    if(error)throw error;
+    pendingPhone=phone;
+    document.getElementById("phone-verify-form").classList.remove("hidden");
+    authNote.textContent="If SMS delivery is enabled, enter the code sent to your phone.";
+  }catch(error){authNote.textContent=error.message||"Unable to send verification code.";}
+  finally{button.disabled=false;}
+});
+document.getElementById("phone-verify-form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(!pendingPhone||!supabaseClient)return;
+  const token=document.getElementById("phone-otp").value.trim();
+  const {data,error}=await supabaseClient.auth.verifyOtp({phone:pendingPhone,token,type:"sms"});
+  if(error){authNote.textContent=error.message;return;}
+  if(data.session){enterChat(false);}
 });
 tabs.forEach(tab=>tab.addEventListener("click",()=>{
   tabs.forEach(t=>t.classList.toggle("active",t===tab));
