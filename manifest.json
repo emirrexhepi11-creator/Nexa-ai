@@ -1,0 +1,18 @@
+{
+  "name": "NEXA AI",
+  "short_name": "NEXA AI",
+  "description": "Your AI thinking partner.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b0b10",
+  "theme_color": "#0b0b10",
+  "icons": [
+    {
+      "src": "/icons/nexa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
