@@ -4,6 +4,14 @@ const chatScreen=document.getElementById("chat-screen");
 const authNote=document.getElementById("auth-note");
 const emailForm=document.getElementById("email-form");
 const phoneForm=document.getElementById("phone-form");
+const phoneInput=document.getElementById("phone");
+const phoneIti=window.intlTelInput&&phoneInput?window.intlTelInput(phoneInput,{
+  initialCountry:"mk",
+  separateDialCode:true,
+  nationalMode:false,
+  preferredCountries:["mk","al","xk","us","gb","de","ch"],
+  loadUtils:()=>import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js")
+}):null;
 const tabs=[...document.querySelectorAll(".tab")];
 const messages=document.getElementById("messages");
 const welcome=document.getElementById("welcome");
@@ -60,11 +68,21 @@ document.getElementById("google-btn").addEventListener("click",()=>authNote.text
 document.getElementById("apple-btn").addEventListener("click",()=>authNote.textContent="Apple sign-in is shown in this preview. It needs Apple Developer and OAuth configuration before it can be used.");
 emailForm.addEventListener("submit",e=>{
   e.preventDefault();
-  authNote.textContent="The interface is ready. Secure registration and login will be activated after we connect the authentication backend.";
+  authNote.textContent="Email login is not active yet. We must connect a secure account service before you can register or sign in.";
 });
 phoneForm.addEventListener("submit",e=>{
   e.preventDefault();
-  authNote.textContent="Phone sign-in needs an SMS verification provider. We will connect it during backend setup.";
+  if(!phoneIti){
+    authNote.textContent="The international phone selector could not load. Please refresh the page and try again.";
+    return;
+  }
+  if(!phoneIti.isValidNumber()){
+    authNote.textContent="Please choose your country and enter a valid phone number.";
+    phoneInput.focus();
+    return;
+  }
+  const internationalNumber=phoneIti.getNumber();
+  authNote.textContent="Valid international number: "+internationalNumber+". SMS sign-in will work after we connect a secure verification service.";
 });
 tabs.forEach(tab=>tab.addEventListener("click",()=>{
   tabs.forEach(t=>t.classList.toggle("active",t===tab));
