@@ -9,9 +9,30 @@ const messages=document.getElementById("messages");
 const welcome=document.getElementById("welcome");
 const input=document.getElementById("message-input");
 const historyList=document.getElementById("history-list");
+const HISTORY_STORAGE_KEY="nexa_ai_conversations_v1";
 let conversations=[];
 let activeConversation=[];
 let guestMode=true;
+
+function saveConversations(){
+  try{
+    localStorage.setItem(HISTORY_STORAGE_KEY,JSON.stringify(conversations));
+  }catch(error){
+    console.warn("NEXA AI could not save conversation history:",error);
+  }
+}
+function loadConversations(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)||"[]");
+    conversations=Array.isArray(saved)?saved.filter(item=>
+      Array.isArray(item)&&item.every(message=>
+        message&&["user","assistant"].includes(message.role)&&typeof message.text==="string"
+      )
+    ):[];
+  }catch(error){
+    conversations=[];
+  }
+}
 
 function showScreen(screen){
   [landingScreen,authScreen,chatScreen].forEach(item=>item.classList.add("hidden"));
@@ -58,13 +79,19 @@ function renderHistory(){
     historyList.innerHTML='<p class="empty-history">Your conversations will appear here.</p>';
     return;
   }
-  conversations.forEach(conversation=>{
+  conversations.forEach((conversation,index)=>{
     const button=document.createElement("button");
     button.className="history-item";
-    button.textContent=conversation[0]?.text||"New chat";
+    const firstUserMessage=conversation.find(message=>message.role==="user");
+    button.textContent=(firstUserMessage?.text||"New chat").slice(0,42);
+    button.title=firstUserMessage?.text||"New chat";
+    button.classList.toggle("active",conversation===activeConversation);
     button.addEventListener("click",()=>{
       activeConversation=conversation;
-      renderMessages();
+      renderHistory();
+      loadConversations();
+renderHistory();
+renderMessages();
       document.getElementById("sidebar").classList.remove("open");
     });
     historyList.appendChild(button);
@@ -94,6 +121,7 @@ async function sendMessage(text){
   }
 
   activeConversation.push({role:"user",text:value});
+  saveConversations();
   input.value="";
   input.disabled=true;
   const sendButton=document.querySelector(".send-btn");
@@ -118,8 +146,10 @@ async function sendMessage(text){
     const data=await response.json();
     if(!response.ok)throw new Error(data.error||"The AI service could not respond.");
     pendingMessage.text=data.reply;
+    saveConversations();
   }catch(error){
     pendingMessage.text="Sorry, NEXA AI could not connect. "+error.message;
+    saveConversations();
   }finally{
     input.disabled=false;
     sendButton.disabled=false;
@@ -152,6 +182,7 @@ document.getElementById("settings-overlay").addEventListener("click",event=>{
 });
 document.getElementById("new-chat").addEventListener("click",()=>{
   activeConversation=[];
+  renderHistory();
   renderMessages();
   input.focus();
 });
