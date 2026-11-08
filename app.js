@@ -21,6 +21,33 @@ const HISTORY_STORAGE_KEY="nexa_ai_conversations_v1";
 let conversations=[];
 let activeConversation=[];
 let guestMode=true;
+let supabaseClient=null;
+async function initializeGoogleLogin(){
+  try {
+    const response=await fetch("/api/auth-config",{cache:"no-store"});
+    if(!response.ok)throw new Error("Configuration unavailable");
+    const config=await response.json();
+    if(!window.supabase?.createClient)throw new Error("Supabase library unavailable");
+    supabaseClient=window.supabase.createClient(config.url,config.publishableKey,{
+      auth:{flowType:"pkce",detectSessionInUrl:true,autoRefreshToken:true,persistSession:true}
+    });
+    const {data:{session},error}=await supabaseClient.auth.getSession();
+    if(error)throw error;
+    if(session?.user){
+      enterChat(false);
+      document.querySelector(".profile-btn span:nth-child(2)").textContent=session.user.email||"Google account";
+    }
+    supabaseClient.auth.onAuthStateChange((event,session)=>{
+      if(event==="SIGNED_IN"&&session?.user){
+        enterChat(false);
+        document.querySelector(".profile-btn span:nth-child(2)").textContent=session.user.email||"Google account";
+      }
+    });
+  }catch(error){
+    console.warn("Google sign-in setup:",error.message);
+  }
+}
+
 
 function saveConversations(){
   try{
@@ -64,7 +91,18 @@ document.getElementById("hero-start").addEventListener("click",()=>enterChat(tru
 document.getElementById("auth-back").addEventListener("click",()=>showScreen(landingScreen));
 document.getElementById("guest-btn").addEventListener("click",()=>enterChat(true));
 document.getElementById("header-signin").addEventListener("click",openAuth);
-document.getElementById("google-btn").addEventListener("click",()=>authNote.textContent="Google sign-in is shown in this preview. It needs secure OAuth configuration before it can be used.");
+document.getElementById("google-btn").addEventListener("click",async()=>{
+  if(!supabaseClient){
+    authNote.textContent="Google login is not configured yet. Check the Supabase connection and redeploy NEXA AI.";
+    return;
+  }
+  authNote.textContent="Opening Google sign-in...";
+  const {error}=await supabaseClient.auth.signInWithOAuth({
+    provider:"google",
+    options:{redirectTo:window.location.origin+window.location.pathname}
+  });
+  if(error)authNote.textContent="Google sign-in failed: "+error.message;
+});
 document.getElementById("apple-btn").addEventListener("click",()=>authNote.textContent="Apple sign-in is shown in this preview. It needs Apple Developer and OAuth configuration before it can be used.");
 emailForm.addEventListener("submit",e=>{
   e.preventDefault();
@@ -212,3 +250,5 @@ document.getElementById("profile-btn").addEventListener("click",()=>{
 loadConversations();
 renderHistory();
 renderMessages();
+
+initializeGoogleLogin();
