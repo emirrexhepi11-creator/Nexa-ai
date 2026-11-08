@@ -79,7 +79,7 @@ function renderHistory(){
     historyList.innerHTML='<p class="empty-history">Your conversations will appear here.</p>';
     return;
   }
-  conversations.forEach((conversation,index)=>{
+  conversations.forEach(conversation=>{
     const button=document.createElement("button");
     button.className="history-item";
     const firstUserMessage=conversation.find(message=>message.role==="user");
@@ -89,9 +89,7 @@ function renderHistory(){
     button.addEventListener("click",()=>{
       activeConversation=conversation;
       renderHistory();
-      loadConversations();
-renderHistory();
-renderMessages();
+      renderMessages();
       document.getElementById("sidebar").classList.remove("open");
     });
     historyList.appendChild(button);
