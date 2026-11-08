@@ -73,6 +73,11 @@
         <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
         <label for="password">Password</label>
         <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" minlength="8" required>
+        <label for="email-action">Account action</label>
+        <select id="email-action" aria-label="Choose email action" style="width:100%;padding:14px;background:#15131e;color:#fff;border:1px solid #393345;border-radius:10px;margin-bottom:12px">
+          <option value="signin">Log in with email</option>
+          <option value="signup">Create a new account</option>
+        </select>
         <button class="primary-btn" type="submit">Continue with email</button>
       </form>
       <form id="phone-form" class="auth-form hidden">
@@ -80,7 +85,12 @@
         <input id="phone" type="tel" placeholder="Enter your phone number" autocomplete="tel" required>
         <p class="tiny muted">Choose your country code. Phone numbers from countries worldwide are supported.</p>
         <button class="primary-btn" type="submit">Continue with phone</button>
-        <p class="tiny muted">Phone verification will be enabled when the secure account service is connected.</p>
+        <p class="tiny muted">A verification code will be sent when SMS authentication is configured.</p>
+      </form>
+      <form id="phone-verify-form" class="auth-form hidden">
+        <label for="phone-otp">SMS verification code</label>
+        <input id="phone-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="6-digit code" required>
+        <button class="primary-btn" type="submit">Verify phone number</button>
       </form>
       <div class="separator"><span>or continue with</span></div>
       <div class="social-buttons">
@@ -154,7 +164,7 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
